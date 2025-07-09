@@ -2,6 +2,8 @@ ERROR_MESSAGE = "Provided value is not a valid"
 full_name_values = []
 age_values = []
 average_grade_values = []
+current_average_grade_values = []
+previous_average_grade_values = []
 
 
 def if_provide_new_student_details(if_new_student):
@@ -41,6 +43,7 @@ for i in range(number_of_students):
             current_average_grade = input("Please provide student's current year average grade")
         else:
             current_average_grade = float(current_average_grade)
+            current_average_grade_values.append(current_average_grade)
 
         previous_average_grade = input("Please provide student's previous year average grade")
         while not previous_average_grade.replace(".", "", 1).isdigit():
@@ -48,11 +51,19 @@ for i in range(number_of_students):
             previous_average_grade = input("Please provide student's previous year average grade")
         else:
             previous_average_grade = float(previous_average_grade)
+            previous_average_grade_values.append(previous_average_grade)
 
         average_grade = (current_average_grade + previous_average_grade) / 2
         average_grade_values.append(average_grade)
     elif not is_new_student:
         break
+
+for i in range(len(full_name_values)):
+    print(f"Name No {i + 1}: {full_name_values[i]}"
+          f"\nAge No {i + 1}: {age_values[i]}"
+          f"\nCurrent grade No {i + 1}: {current_average_grade_values[i]}"
+          f"\nPrevious grade No {i + 1}: {previous_average_grade_values[i]}"
+          f"\nAverage grade No {i + 1}: {average_grade_values[i]}")
 
 for i in range(len(full_name_values)):
     full_name = full_name_values[i]
