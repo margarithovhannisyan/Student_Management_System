@@ -1,4 +1,4 @@
-ERROR_MESSAGE = "Provided value is not a valid"
+ERROR_MESSAGE = "Provided value is not valid"
 full_name_values = []
 age_values = []
 average_grade_values = []
