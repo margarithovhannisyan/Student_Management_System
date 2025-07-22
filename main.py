@@ -1,4 +1,3 @@
-ERROR_MESSAGE = "Provided value is not valid"
 personal_data = {
     "full_name_values": [],
     "age_values": []
@@ -10,8 +9,7 @@ previous_average_grade_values = []
 
 def check_if_value_is_natural(provided_value):
     while not provided_value.isdigit():
-        print(ERROR_MESSAGE)
-        provided_value = input("Please provide the number of students")
+        provided_value = input("Please provide a natural number")
     else:
         provided_value = int(provided_value)
         return provided_value
@@ -19,8 +17,7 @@ def check_if_value_is_natural(provided_value):
 
 def check_if_value_is_positive_real_number(provided_value):
     while not provided_value.replace(".", "", 1).isdigit():
-        print(ERROR_MESSAGE)
-        provided_value = input("Please provide student's current year average grade")
+        provided_value = input("Please provide a positive real number")
     else:
         provided_value = float(provided_value)
     return provided_value
@@ -47,7 +44,6 @@ for i in range(number_of_students):
         personal_data["full_name_values"].append(full_name)
         age = input("Please provide student's age")
         while not age.isdigit() or not (16 <= int(age) < 100):
-            print(ERROR_MESSAGE)
             age = input("Please provide student's age")
         else:
             personal_data["age_values"].append(int(age))
