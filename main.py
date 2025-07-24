@@ -21,28 +21,41 @@ def normalize_string_input(ask_message):
             # return the cleaned and formatted string
             return string_value
         else:
-        # if input is invalid, ask for a new input again with an error message
+            # if input is invalid, ask for a new input again with an error message
             input("Invalid input. Please enter a non-empty string using only letters and spaces.")
 
 
-def check_if_value_is_natural(provided_value):
+# check if the provided value is a natural number (1, 2, 3, ...)
+def check_if_value_is_natural(ask_message):
+    provided_value = input(ask_message)
+    # loop until the input consists only of digits
     while not provided_value.isdigit():
-        provided_value = input("Please provide a natural number")
+        provided_value = input("Please provide a natural number: ")
     else:
+        # convert the valid digit string to an integer
         provided_value = int(provided_value)
+        # return the integer value
         return provided_value
 
 
-def check_if_value_is_positive_real_number(provided_value):
+# check if the provided value is a positive real number (e.g., 1, 2.5, 0.01)
+def check_if_value_is_positive_real_number(ask_question):
+    provided_value = input(ask_question)
+    # loop until the input is a valid
     while not provided_value.replace(".", "", 1).isdigit():
-        provided_value = input("Please provide a positive real number")
+        provided_value = input("Please provide a positive real number: ")
     else:
+        # convert the valid string input to a float
         provided_value = float(provided_value)
+    # Return the converted float value
     return provided_value
 
 
-def if_provide_new_student_details(if_new_student):
+# check if the user wants to provide new student details
+def if_provide_new_student_details(ask_question):
+    if_new_student = input(ask_question)
     while True:
+        # convert the input to lowercase for consistent comparison
         if if_new_student.lower() in ["yes", "ayo"]:
             answer = True
             return answer
@@ -50,13 +63,13 @@ def if_provide_new_student_details(if_new_student):
             answer = False
             return answer
         else:
-            if_new_student = input("Please answer with: yes / ayo / no / voch")
+            if_new_student = input("Please answer with: yes / ayo / no / voch: ")
 
 
-number_of_students = check_if_value_is_natural(input("Please provide the number of students"))
+number_of_students = check_if_value_is_natural("Please provide the number of students")
 
 for i in range(number_of_students):
-    is_new_student = if_provide_new_student_details(input("Do you want to provide a new student details? Yes/No"))
+    is_new_student = if_provide_new_student_details("Do you want to provide a new student details? Yes/No")
     if is_new_student:
         first_name = normalize_string_input("Please provide student's first name")
         last_name = normalize_string_input("Please provide student's last name")
@@ -69,11 +82,11 @@ for i in range(number_of_students):
             personal_data["age_values"].append(int(age))
 
         current_average_grade = check_if_value_is_positive_real_number(
-            input("Please provide student's current year average grade"))
+            "Please provide student's current year average grade")
         current_average_grade_values.append(current_average_grade)
 
         previous_average_grade = check_if_value_is_positive_real_number(
-            input("Please provide student's previous year average grade"))
+            "Please provide student's previous year average grade")
         previous_average_grade_values.append(previous_average_grade)
 
         average_grade = (current_average_grade + previous_average_grade) / 2
