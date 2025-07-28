@@ -18,21 +18,6 @@ def normalize_string_input(ask_message):
             print("Invalid input. Please enter a non-empty string using only letters and spaces.")
 
 
-# Function checks if provided age is within 16-100
-def get_validated_age(ask_message):
-    age = input(ask_message)
-    while not age.isdigit() or not (16 <= int(age) < 100):
-        age = input("Invalid age. Student should be between 16-100")
-    else:
-        return int(age)
-
-
-# Function calculates average grate for 2 years:
-def calculate_average_grade(previous_average_grade, current_average_grade):
-    average_grade = (current_average_grade + previous_average_grade) / 2
-    return average_grade
-
-
 # Function checks if the provided value is a natural number (1, 2, 3, ...)
 def check_if_value_is_natural(ask_message):
     provided_value = input(ask_message)
@@ -59,19 +44,35 @@ def check_if_value_is_positive_real_number(ask_question):
     return provided_value
 
 
-# Function checks if the user wants to provide student details
-def if_provide_new_student_details(ask_question):
-    if_new_student = input(ask_question).lower()
-    while True:
-        # convert the input to lowercase for consistent comparison
-        if if_new_student in ["yes", "ayo"]:
-            answer = True
-            return answer
-        elif if_new_student in ["no", "voch"]:
-            answer = False
-            return answer
-        else:
-            if_new_student = input("Please answer with: yes / ayo / no / voch: ")
+# Function checks if provided age is within 16-100
+def get_validated_age(ask_message):
+    age = input(ask_message)
+    while not age.isdigit() or not (16 <= int(age) < 100):
+        age = input("Invalid age. Student should be between 16-100")
+    else:
+        return int(age)
+
+
+# Function determines age category
+def get_age_category(first_name, last_name, age):
+    if age < 18:
+        return f"{first_name} {last_name}, being {age} years old, is a Primary School student."
+    else:
+        return f"{first_name} {last_name}, being {age} years old, is a College student."
+
+
+# Function calculates average grate for 2 years:
+def calculate_average_grade(previous_average_grade, current_average_grade):
+    average_grade = (current_average_grade + previous_average_grade) / 2
+    return average_grade
+
+
+# Function evaluates if grade is failed or passed
+def evaluate_grade_result(first_name, last_name, average_grade):
+    if average_grade < 50:
+        return f"As {first_name} {last_name}'s average grade is {average_grade}, exams are failed."
+    else:
+        return f"As {first_name} {last_name}'s average grade is {average_grade}, exams are passed."
 
 
 # Function generates unique email addresses
@@ -89,8 +90,49 @@ def generate_unique_email(first_name, last_name):
     return email_address
 
 
+# Getting students all info
+def get_student_details():
+    for index, student in enumerate(students_info, start=1):
+        print(f"Student No {index}:")
+        print(f"  First name : {student['first_name']}")
+        print(f"  Last name  : {student['last_name']}")
+        print(f"  Email address : {student['email_address']}")
+        print(f"  Age : {student['age']}")
+        print(f"  Previous average grade : {student['previous_average_grade']}")
+        print(f"  Current average grade : {student['current_average_grade']}")
+        print(f"  Average grade : {student['average_grade']}")
+        print("  " + get_age_category(student['first_name'], student['last_name'], student['age']))
+        print("  " + evaluate_grade_result(student['first_name'], student['last_name'], student['average_grade']))
+
+
+# Function checks if the user wants to provide student details
+def if_provide_new_student_details(ask_question):
+    while True:
+        if_new_student = input(ask_question).lower()
+        # convert the input to lowercase for consistent comparison
+        if if_new_student in ["yes", "ayo"]:
+            answer = True
+            return answer
+        elif if_new_student in ["no", "voch"]:
+            answer = False
+            return answer
+
+
+# Function checks if data fill be provided manually or by using a file
+def process_student_info_manually_or_from_file():
+    ask_question = input("Will the students data be provided manually or from a file: M or F").lower()
+    while True:
+        if ask_question == "m":
+            return provide_student_info_manually()
+        elif ask_question == "f":
+            return provide_student_info_from_file()
+        else:
+            ask_question = input("Input M for manual input and F for File usage").lower()
+
+
 # Function collects all student related data
-def collect_student_info():
+def provide_student_info_manually():
+    number_of_students = check_if_value_is_natural("Please provide the number of students")
     for i in range(number_of_students):
         is_new_student = if_provide_new_student_details("Do you want to provide a new student details? Yes/No")
         if is_new_student:
@@ -116,39 +158,45 @@ def collect_student_info():
             students_info.append(student)
         elif not is_new_student:
             break
+    return get_student_details()
 
 
-# Function determines age category
-def get_age_category(first_name, last_name, age):
-    if age < 18:
-        return f"{first_name} {last_name}, being {age} years old, is a Primary School student."
-    else:
-        return f"{first_name} {last_name}, being {age} years old, is a College student."
+def provide_student_info_from_file():
+    data = {}
+    try:
+        with open("StudentsList.txt", "r") as initial_file:
+            for line in initial_file:
+                key, values = line.strip().split(':')
+                data[key.strip()] = [value.strip() for value in values.strip().split(',')]
+    except FileNotFoundError:
+        print("Expected initial file not found")
+        return
+
+    output_file = input("Print File name")
+    if not output_file.endswith(".txt"):
+        raise ValueError("Output file must have a .txt extension.")
+
+    with open(output_file, 'w') as file:
+        num_students = len(data['name'])
+        for i in range(num_students):
+            first_name = data['name'][i]
+            last_name = data['surname'][i]
+            previous_average_grade = int(data['pyg'][i])
+            current_average_grade = int(data['cyg'][i])
+            average_grade = calculate_average_grade(previous_average_grade, current_average_grade)
+            email = generate_unique_email(first_name, last_name)
+
+            file.write(f"Student No {i + 1}\n")
+            file.write(f"First name: {first_name}\n")
+            file.write(f"Last name: {last_name}\n")
+            file.write(f"Age: {data['age'][i]}\n")
+            file.write(f"Previous average grade: {previous_average_grade}\n")
+            file.write(f"Current average grade: {current_average_grade}\n")
+            file.write(f"Average grade: {average_grade:.1f}\n")
+            file.write(f"Email: {email}\n\n")
+
+    print(f"Formatted student info written to {output_file}")
+    print("Operation completed")
 
 
-# Function evaluates if grade is failed or passed
-def evaluate_grade_result(first_name, last_name, average_grade):
-    if average_grade < 50:
-        return f"As {first_name} {last_name}'s average grade is {average_grade}, exams are failed."
-    else:
-        return f"As {first_name} {last_name}'s average grade is {average_grade}, exams are passed."
-
-
-# Getting students all info
-def get_student_details():
-    for index, student in enumerate(students_info, start=1):
-        print(f"Student No {index}:")
-        print(f"  First name : {student['first_name']}")
-        print(f"  Last name  : {student['last_name']}")
-        print(f"  Email address : {student['email_address']}")
-        print(f"  Age : {student['age']}")
-        print(f"  Previous average grade : {student['previous_average_grade']}")
-        print(f"  Current average grade : {student['current_average_grade']}")
-        print(f"  Average grade : {student['average_grade']}")
-        print("  " + get_age_category(student['first_name'], student['last_name'], student['age']))
-        print("  " + evaluate_grade_result(student['first_name'], student['last_name'], student['average_grade']))
-
-
-number_of_students = check_if_value_is_natural("Please provide the number of students")
-collect_student_info()
-get_student_details()
+process_student_info_manually_or_from_file()
