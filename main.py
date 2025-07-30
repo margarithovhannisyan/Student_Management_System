@@ -163,16 +163,20 @@ def provide_student_info_manually():
 
 def provide_student_info_from_file():
     data = {}
+    initial_file1 = input("Provide initial file location")
     try:
-        with open("StudentsList.txt", "r") as initial_file:
+        with open(initial_file1, "r") as initial_file:
             for line in initial_file:
                 key, values = line.strip().split(':')
                 data[key.strip()] = [value.strip() for value in values.strip().split(',')]
     except FileNotFoundError:
         print("Expected initial file not found")
         return
+    except PermissionError:
+        print("Permission denied when trying to open the file.")
+        return
 
-    output_file = input("Print File name")
+    output_file = input("Provide output file name")
     if not output_file.endswith(".txt"):
         raise ValueError("Output file must have a .txt extension.")
 
