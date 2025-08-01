@@ -1,0 +1,5 @@
+name: Anna, Anna, Ani
+surname: Hovhannisyan, hovhannisyan, Dashyan
+age: 30, 25, 18
+pyg: 18, 16 , 15
+cyg: 20, 8, 4
