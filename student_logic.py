@@ -1,5 +1,6 @@
 import input_handlers
 from app_controller import students_info, get_student_details
+from logger_config import logger
 
 existing_emails = set()
 
@@ -67,14 +68,15 @@ def provide_student_info_from_file():
                 key, values = line.strip().split(':')
                 data[key.strip()] = [value.strip() for value in values.strip().split(',')]
     except FileNotFoundError:
-        print("Expected initial file not found")
+        logger.error("Expected initial file not found")
         return
     except PermissionError:
-        print("Permission denied when trying to open the file.")
+        logger.error("Permission denied when trying to open the file.")
         return
 
     output_file = input("Provide output file name")
     if not output_file.endswith(".txt"):
+        logger.error(f"{output_file} does not end with .txt")
         raise ValueError("Output file must have a .txt extension.")
 
     with open(output_file, 'w') as file:
@@ -96,5 +98,5 @@ def provide_student_info_from_file():
             file.write(f"Average grade: {average_grade:.1f}\n")
             file.write(f"Email: {email}\n\n")
 
-    print(f"Formatted student info written to {output_file}")
-    print("Operation completed")
+    logger.info(f"Formatted student info written to {output_file}")
+    logger.info("Operation completed")

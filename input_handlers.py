@@ -1,4 +1,5 @@
 from student_logic import provide_student_info_manually, provide_student_info_from_file
+from logger_config import logger
 
 
 # Function checks for empty input or non-alphabetic characters (excluding spaces) and normalizes string
@@ -14,7 +15,8 @@ def normalize_string_input(ask_message):
             return string_value
         else:
             # if input is invalid, ask for a new input again with an error message
-            print("Invalid input. Please enter a non-empty string using only letters and spaces.")
+            logger.error(
+                f"Invalid input {string_value} : Please enter a non-empty string using only letters and spaces.")
 
 
 # Function checks if the provided value is a natural number (1, 2, 3, ...)
@@ -22,6 +24,7 @@ def check_if_value_is_natural(ask_message):
     provided_value = input(ask_message)
     # loop until the input consists of digits only
     while not provided_value.isdigit():
+        logger.error(f"Provider value {provided_value} was not natural number")
         provided_value = input("Please provide a natural number: ")
     else:
         # convert the valid digit string to an integer
@@ -35,6 +38,7 @@ def check_if_value_is_positive_real_number(ask_question):
     provided_value = input(ask_question)
     # loop until the input is a valid
     while not provided_value.replace(".", "", 1).isdigit():
+        logger.error(f"Provided value {provided_value} was not a real number")
         provided_value = input("Please provide a positive real number: ")
     else:
         # convert the valid string input to a float
@@ -47,6 +51,7 @@ def check_if_value_is_positive_real_number(ask_question):
 def get_validated_age(ask_message):
     age = input(ask_message)
     while not age.isdigit() or not (16 <= int(age) < 100):
+        logger.error(f"Provided age {age} was not between 16-100")
         age = input("Invalid age. Student should be between 16-100")
     else:
         return int(age)
@@ -74,4 +79,5 @@ def process_student_info_manually_or_from_file():
         elif ask_question == "f":
             return provide_student_info_from_file()
         else:
+            logger.error("Answer didn't match to M or F")
             ask_question = input("Input M for manual input and F for File usage").lower()
