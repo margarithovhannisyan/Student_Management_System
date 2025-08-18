@@ -1,19 +1,21 @@
+from logger_config import logger
+
 students_info = []
 
 
 # Getting students all info
 def get_student_details():
     for index, student in enumerate(students_info, start=1):
-        print(f"Student No {index}:")
-        print(f"  First name : {student['first_name']}")
-        print(f"  Last name  : {student['last_name']}")
-        print(f"  Email address : {student['email_address']}")
-        print(f"  Age : {student['age']}")
-        print(f"  Previous average grade : {student['previous_average_grade']}")
-        print(f"  Current average grade : {student['current_average_grade']}")
-        print(f"  Average grade : {student['average_grade']}")
-        print("  " + get_age_category(student['first_name'], student['last_name'], student['age']))
-        print("  " + evaluate_grade_result(student['first_name'], student['last_name'], student['average_grade']))
+        logger.info(f"Student No {index}:")
+        logger.info(f"  First name : {student['first_name']}")
+        logger.info(f"  Last name  : {student['last_name']}")
+        logger.info(f"  Email address : {student['email_address']}")
+        logger.info(f"  Age : {student['age']}")
+        logger.info(f"  Previous average grade : {student['previous_average_grade']}")
+        logger.info(f"  Current average grade : {student['current_average_grade']}")
+        logger.info(f"  Average grade : {student['average_grade']}")
+        logger.info("  " + get_age_category(student['first_name'], student['last_name'], student['age']))
+        logger.info("  " + evaluate_grade_result(student['first_name'], student['last_name'], student['average_grade']))
 
 
 # Function determines age category
