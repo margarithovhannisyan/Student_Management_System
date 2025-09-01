@@ -53,3 +53,12 @@ class Student:
     def get_average_grade(self):
         average_grade = (self.get_current_average_grade() + self.get_previous_average_grade()) / 2
         return average_grade
+
+    def set_offline_lessons_time(self, offline_lessons_time):
+        if offline_lessons_time < 0:
+            raise ValueError("Offline lessons time cannot be negative")
+        self.__offline_lessons_time = offline_lessons_time
+
+    def get_total_lessons_time(self):
+        total_lessons_time = self.__offline_lessons_time
+        return total_lessons_time
