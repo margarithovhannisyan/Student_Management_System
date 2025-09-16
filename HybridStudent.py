@@ -1,4 +1,4 @@
-class HybridStudent():
+class HybridStudent:
     def set_online_lessons_time(self, online_lessons_time):
         if int(online_lessons_time) < 0:
             raise ValueError("Offline lessons time cannot be negative")
