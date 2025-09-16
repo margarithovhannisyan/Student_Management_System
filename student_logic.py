@@ -149,14 +149,8 @@ def provide_student_info_from_json():
         raise ValueError("Output file must have a .json extension.")
 
     # Write processed data
-    try:
-        with open(output_file, "w") as outfile:
-            json.dump(data, outfile, indent=4)
-        logger.info(f"Formatted student info written to {output_file}")
-        logger.info("Operation completed")
-    except Exception as e:
-        logger.error(f"Failed to write output file: {e}")
-        raise
+    with open(output_file, "w") as outfile:
+        json.dump(data, outfile, indent=4)
 
     logger.info(f"Formatted student info written to {output_file}")
     logger.info("Operation completed")
