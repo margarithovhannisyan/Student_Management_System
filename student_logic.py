@@ -5,6 +5,7 @@ import json
 from Student import Student
 
 existing_emails = set()
+students_list = []
 
 
 # Function calculates average grate for 2 years:
@@ -42,16 +43,28 @@ def provide_student_info_manually():
                 "Please provide student's previous year average grade")
             current_average_grade = input_handlers.check_if_value_is_positive_real_number(
                 "Please provide student's current year average grade")
+            email_address = generate_unique_email(first_name, last_name)
+            average_grade = calculate_average_grade(previous_average_grade, current_average_grade)
             student = Student(first_name, last_name, age)
             student.generate_unique_email()
             student.set_previous_average_grade(previous_average_grade)
             student.set_current_average_grade(current_average_grade)
             student.set_offline_lessons_time(input("Please provide student's offline lessons time"))
             student.set_online_lessons_time(input("Please provide student's online lessons time"))
-            students_info.append(student)
+            students_list.append(student)
+            student_list = {
+                "first_name": first_name,
+                "last_name": last_name,
+                "email_address": email_address,
+                "age": age,
+                "previous_average_grade": previous_average_grade,
+                "current_average_grade": current_average_grade,
+                "average_grade": average_grade
+            }
+            students_info.append(student_list)
         elif not is_new_student:
             break
-    return print(students_info)
+    return get_student_details()
 
 
 # Function collects all student related from a file
