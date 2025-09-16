@@ -1,6 +1,8 @@
 import input_handlers
 from app_controller import students_info, get_student_details
 from logger_config import logger
+import json
+from Student import Student
 
 existing_emails = set()
 
@@ -35,27 +37,21 @@ def provide_student_info_manually():
         if is_new_student:
             first_name = input_handlers.normalize_string_input("Please provide student's first name")
             last_name = input_handlers.normalize_string_input("Please provide student's last name")
-            email_address = generate_unique_email(first_name, last_name)
             age = input_handlers.get_validated_age("Please provide student's age")
             previous_average_grade = input_handlers.check_if_value_is_positive_real_number(
                 "Please provide student's previous year average grade")
             current_average_grade = input_handlers.check_if_value_is_positive_real_number(
                 "Please provide student's current year average grade")
-            average_grade = calculate_average_grade(previous_average_grade, current_average_grade)
-
-            student = {
-                "first_name": first_name,
-                "last_name": last_name,
-                "email_address": email_address,
-                "age": age,
-                "previous_average_grade": previous_average_grade,
-                "current_average_grade": current_average_grade,
-                "average_grade": average_grade
-            }
+            student = Student(first_name, last_name, age)
+            student.generate_unique_email()
+            student.set_previous_average_grade(previous_average_grade)
+            student.set_current_average_grade(current_average_grade)
+            student.set_offline_lessons_time(input("Please provide student's offline lessons time"))
+            student.set_online_lessons_time(input("Please provide student's online lessons time"))
             students_info.append(student)
         elif not is_new_student:
             break
-    return get_student_details()
+    return print(students_info)
 
 
 # Function collects all student related from a file
@@ -97,6 +93,57 @@ def provide_student_info_from_file():
             file.write(f"Current average grade: {current_average_grade}\n")
             file.write(f"Average grade: {average_grade:.1f}\n")
             file.write(f"Email: {email}\n\n")
+
+    logger.info(f"Formatted student info written to {output_file}")
+    logger.info("Operation completed")
+
+
+# Function collects all student related from json
+def provide_student_info_from_json():
+    print("Function called")
+    # Input file
+    initial_file_path = input("Provide initial JSON location: ").strip()
+    try:
+        with open(initial_file_path, "r") as file:
+            data = json.load(file)
+    except FileNotFoundError:
+        logger.error("Expected initial JSON not found")
+        return
+    except PermissionError:
+        logger.error("Permission denied when trying to open the JSON.")
+        return
+
+    # Validate required fields
+    required_fields = {"name", "surname", "age", "pyg", "cyg"}
+    for student in data:
+        if not required_fields.issubset(student.keys()):
+            logger.error(f"Student missing required fields: {student}")
+            return
+
+    # Process students
+    for student in data:
+        name = student.get("name", "")
+        surname = student.get("surname", "")
+        pyg = student.get("pyg", 0)
+        cyg = student.get("cyg", 0)
+        student["email"] = generate_unique_email(name, surname)
+        student["average_grade"] = calculate_average_grade(pyg, cyg)
+
+    # Output file
+    output_file = input("Provide output file name: ").strip()
+    if not output_file.lower().endswith(".json"):
+        logger.error(f"{output_file} does not end with .json")
+        raise ValueError("Output file must have a .json extension.")
+
+    # Write processed data
+    try:
+        with open(output_file, "w") as outfile:
+            json.dump(data, outfile, indent=4)
+        logger.info(f"Formatted student info written to {output_file}")
+        logger.info("Operation completed")
+    except Exception as e:
+        logger.error(f"Failed to write output file: {e}")
+        raise
 
     logger.info(f"Formatted student info written to {output_file}")
     logger.info("Operation completed")

@@ -1,4 +1,4 @@
-from student_logic import provide_student_info_manually, provide_student_info_from_file
+import student_logic
 from logger_config import logger
 
 
@@ -71,13 +71,15 @@ def if_provide_new_student_details(ask_question):
 
 
 # Function checks if data fill be provided manually or by using a file
-def process_student_info_manually_or_from_file():
-    ask_question = input("Will the students data be provided manually or from a file: M or F").lower()
+def process_student_info_manually_or_from_file_or_from_json():
+    ask_question = input("Will the students data be provided manually, from a file, or from json: M/F/J").lower()
     while True:
         if ask_question == "m":
-            return provide_student_info_manually()
+            return student_logic.provide_student_info_manually()
         elif ask_question == "f":
-            return provide_student_info_from_file()
+            return student_logic.provide_student_info_from_file()
+        elif ask_question == "j":
+            return student_logic.provide_student_info_from_json()
         else:
-            logger.error("Answer didn't match to M or F")
-            ask_question = input("Input M for manual input and F for File usage").lower()
+            logger.error("Answer didn't match to M/F/J")
+            ask_question = input("Input M for manual input, F for File usage, J for Json usage").lower()
