@@ -1,0 +1,23 @@
+[
+    {
+        "name": "Anna",
+        "surname": "Hovhannisyan",
+        "age": 30,
+        "pyg": 18,
+        "cyg": 20
+    },
+    {
+        "name": "Anna",
+        "surname": "hovhannisyan",
+        "age": 25,
+        "pyg": 16,
+        "cyg": 8
+    },
+    {
+        "name": "Ani",
+        "surname": "Dashyan",
+        "age": 18,
+        "pyg": 15,
+        "cyg": 4
+    }
+]
