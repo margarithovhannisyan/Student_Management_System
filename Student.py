@@ -1,4 +1,7 @@
-class Student:
+from HybridStudent import HybridStudent
+
+
+class Student(HybridStudent):
     existing_emails = set()
 
     def __init__(self, first_name, last_name, age):
@@ -55,10 +58,13 @@ class Student:
         return average_grade
 
     def set_offline_lessons_time(self, offline_lessons_time):
-        if offline_lessons_time < 0:
+        if int(offline_lessons_time) < 0:
             raise ValueError("Offline lessons time cannot be negative")
         self.__offline_lessons_time = offline_lessons_time
 
+    def get_offline_lessons_time(self):
+        return self.__offline_lessons_time
+
     def get_total_lessons_time(self):
-        total_lessons_time = self.__offline_lessons_time
+        total_lessons_time = HybridStudent.get_total_lessons_time(self) + self.get_offline_lessons_time()
         return total_lessons_time
